@@ -73,6 +73,7 @@
             this.Controls.Add(this.dgShowGachaChara);
             this.Name = "frmGachaCharactor";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.FrmGachaCharactor_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgShowGachaChara)).EndInit();
             this.ResumeLayout(false);
 

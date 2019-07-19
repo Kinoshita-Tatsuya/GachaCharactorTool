@@ -8,35 +8,29 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GachaTool.Models.Services;
+using GachaTool.Models.ValueObjects;
 using MySql.Data.MySqlClient;
 
 namespace GachaTool.Views
 {
     public partial class frmGachaCharactor : Form
     {
+        private int currentRowIndex;
+
         public frmGachaCharactor()
         {
             InitializeComponent();
         }
 
+        private void FrmGachaCharactor_Load(object sender, EventArgs e)
+        {
+            LoadDB();
+        }
+
         //読み込みボタン
         private void Button1_Click_1(object sender, EventArgs e)
         {
-            using (var connction = Connection.OpenLocal())
-            {
-                var dataTable = new DataTable();
-                var cmd = new MySqlCommand("SELECT * FROM gachatable", connction);
-                var dataAdapter = new MySqlDataAdapter(cmd);
-
-                //データ取得 
-                dataAdapter.Fill(dataTable);
-
-                //データ表示
-                this.dgShowGachaChara.DataSource = dataTable;
-            }
-
-            //読み込み時のID数を保存しておく
-            currentRowIndex = this.dgShowGachaChara.Rows.Count;
+            LoadDB();
         }
 
         //更新ボタン
@@ -56,7 +50,7 @@ namespace GachaTool.Views
                 for (; insertRowIndex < dgShowGachaChara.Rows.Count - 1; ++insertRowIndex)
                 {
                     var cmd = new MySqlCommand("insert into gachatable " +
-                    "values (?ID, ?CharactorName, ?Probability, ?Rarity, ?Image )", connction);
+                    "values (@ID, @CharactorName, @Probability, @Rarity, @Image )", connction);
 
                     cmd.Parameters.Add(new MySqlParameter("ID",
                         Convert.ToInt32(dgShowGachaChara.Rows[insertRowIndex].Cells[0].Value)));
@@ -79,6 +73,23 @@ namespace GachaTool.Views
             }
         }
 
-        private int currentRowIndex;
+        private void LoadDB()
+        {
+            using (var connction = Connection.OpenLocal())
+            {
+                var dataTable = new DataTable();
+                var cmd = new MySqlCommand("SELECT * FROM gachatable", connction);
+                var dataAdapter = new MySqlDataAdapter(cmd);
+
+                //データ取得 
+                dataAdapter.Fill(dataTable);
+
+                //データ表示
+                this.dgShowGachaChara.DataSource = dataTable;
+            }
+
+            //読み込み時のID数を保存しておく
+            currentRowIndex = this.dgShowGachaChara.Rows.Count;
+        }
     }
 }
