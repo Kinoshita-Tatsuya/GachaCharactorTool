@@ -8,6 +8,7 @@
 
 CREATE `gachasimulator`;
 USE `gachasimulator`;
+
 CREATE TABLE `gachtable` (
   `ID` INT NOT NULL,
   `CharactorName` VARCHAR(255) NOT NULL,
