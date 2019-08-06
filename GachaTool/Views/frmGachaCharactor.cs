@@ -40,7 +40,11 @@ namespace GachaTool.Views
             var diffRowIndex = this.dgShowGachaChara.Rows.Count - currentRowIndex;
 
             //行が追加されていなかったら
-            if (diffRowIndex < 0) return;
+            if (diffRowIndex <= 0)
+            {
+                MessageBox.Show("変更されていません");
+                return;
+            }
 
             using (var connction = Connection.OpenLocal())
             {
