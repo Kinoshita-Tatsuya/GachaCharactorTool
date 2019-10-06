@@ -15,8 +15,6 @@ namespace GachaTool.Views
 {
     public partial class frmGachaCharactor : Form
     {
-        private int currentRowIndex;
-
         public frmGachaCharactor()
         {
             InitializeComponent();
@@ -24,60 +22,59 @@ namespace GachaTool.Views
 
         private void FrmGachaCharactor_Load(object sender, EventArgs e)
         {
-            LoadDB();
+            DisplayDB();
+
+            dgShowGachaChara.AllowUserToAddRows = false;
         }
 
         //読み込みボタン
-        private void Button1_Click_1(object sender, EventArgs e)
+        private void BtnLoadGachaChara_Click(object sender, EventArgs e)
         {
-            LoadDB();
+            DisplayDB();
         }
 
         //更新ボタン
-        private void Button1_Click(object sender, EventArgs e)
+        private void BtnGachaCharaUpdate_Click(object sender, EventArgs e)
         {
-            //行数の差分割り出す
-            var diffRowIndex = this.dgShowGachaChara.Rows.Count - currentRowIndex;
+            var sql = new StringBuilder();
 
-            //行が追加されていなかったら
-            if (diffRowIndex <= 0)
+            for (var row = 0; row < dgShowGachaChara.RowCount; ++row)
             {
-                MessageBox.Show("変更されていません");
-                return;
-            }
+                sql.Append("UPDATE ");
+                sql.Append("gachatable");
+                sql.Append(" SET ");
 
-            using (var connction = Connection.OpenLocal())
-            {
-                //-1は勝手に追加されているrowの分を減らしている
-                var insertRowIndex = this.dgShowGachaChara.Rows.Count - diffRowIndex - 1;
-
-                for (; insertRowIndex < dgShowGachaChara.Rows.Count - 1; ++insertRowIndex)
+                for (var column = 1; column < dgShowGachaChara.ColumnCount; ++column)
                 {
-                    var cmd = new MySqlCommand("insert into gachatable " +
-                    "values (@ID, @CharactorName, @Probability, @Rarity, @Image )", connction);
+                    string value = dgShowGachaChara.Rows[row].Cells[column].Value.ToString();
 
-                    cmd.Parameters.Add(new MySqlParameter("ID",
-                        Convert.ToInt32(dgShowGachaChara.Rows[insertRowIndex].Cells[0].Value)));
+                    if (value == "" || value == null) continue;
 
-                    cmd.Parameters.Add(new MySqlParameter("CharactorName",
-                        Convert.ToString(dgShowGachaChara.Rows[insertRowIndex].Cells[1].Value)));
+                    sql.Append("`").Append(dgShowGachaChara.Columns[column].Name).Append("`");
+                    sql.Append(" = ");
 
-                    cmd.Parameters.Add(new MySqlParameter("Probability",
-                        Convert.ToSingle(dgShowGachaChara.Rows[insertRowIndex].Cells[2].Value)));
+                    sql.Append("'").Append(value).Append("'");
+                    sql.Append(",");
+                }
 
-                    cmd.Parameters.Add(new MySqlParameter("Rarity",
-                        Convert.ToInt32(dgShowGachaChara.Rows[insertRowIndex].Cells[3].Value)));
+                sql.Remove(sql.Length - 1, 1);
 
-                    cmd.Parameters.Add(new MySqlParameter("Image",
-                        Convert.ToString(dgShowGachaChara.Rows[insertRowIndex].Cells[4].Value)));
+                sql.Append(" WHERE (`Id` = ");
+                sql.Append(dgShowGachaChara.Rows[row].Cells[0].Value.ToString());
+                sql.Append(");");
 
-                    //実行
+                using (var con = Connection.OpenLocal())
+                {
+                    var cmd = new MySqlCommand(sql.ToString(), con);
+
                     cmd.ExecuteNonQuery();
                 }
+
+                sql.Clear();
             }
         }
 
-        private void LoadDB()
+        private void DisplayDB()
         {
             using (var connction = Connection.OpenLocal())
             {
@@ -91,9 +88,48 @@ namespace GachaTool.Views
                 //データ表示
                 this.dgShowGachaChara.DataSource = dataTable;
             }
+        }
 
-            //読み込み時のID数を保存しておく
-            currentRowIndex = this.dgShowGachaChara.Rows.Count;
+        /// <summary>
+        /// IDを自動的に割り当てる
+        /// </summary>
+        /// <returns>次のIDの値</returns>
+        private int AssignID()
+        {
+            var rowCnt = dgShowGachaChara.RowCount;
+
+            int nextId = Convert.ToInt16(dgShowGachaChara.Rows[rowCnt - 1].Cells[0].Value) + 1;
+
+            dgShowGachaChara.Rows[rowCnt - 1].Cells[0].Value = nextId;
+
+            return nextId;
+        }
+
+        private void BtnInsertChara_Click(object sender, EventArgs e)
+        {
+            var frm = new frmCharaParamSetter();
+            frm.ShowDialog();
+
+            var param = new CharactorParameter();
+            param = frm.resultParam;
+
+            frm.Dispose();
+
+            using (var connction = Connection.OpenLocal())
+            {
+                var cmd = new MySqlCommand("insert into gachatable " +
+                "values (@ID, @CharactorName, @Probability, @Rarity, @Image )", connction);
+                
+                param.ID = AssignID();
+
+                cmd.Parameters.Add(new MySqlParameter("@ID", param.ID));
+                cmd.Parameters.Add(new MySqlParameter("@CharactorName", param.Name));
+                cmd.Parameters.Add(new MySqlParameter("@Probability", param.Probability));
+                cmd.Parameters.Add(new MySqlParameter("@Rarity", param.Rarity));
+                cmd.Parameters.Add(new MySqlParameter("@Image", param.Image));
+
+                cmd.ExecuteNonQuery();
+            }
         }
     }
 }

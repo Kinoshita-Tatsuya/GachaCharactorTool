@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GachaTool.Models.ValueObjects
 {
-    class CharactorParameter
+    public class CharactorParameter
     {
         public int ID { get; set; }
         public string Name { get; set; }

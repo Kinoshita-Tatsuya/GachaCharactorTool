@@ -29,8 +29,9 @@
         private void InitializeComponent()
         {
             this.dgShowGachaChara = new System.Windows.Forms.DataGridView();
-            this.btnLoadGachaChara = new System.Windows.Forms.Button();
-            this.btnGachaCharaUpdate = new System.Windows.Forms.Button();
+            this.BtnLoadGachaChara = new System.Windows.Forms.Button();
+            this.BtnGachaCharaUpdate = new System.Windows.Forms.Button();
+            this.BtnInsertChara = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgShowGachaChara)).BeginInit();
             this.SuspendLayout();
             // 
@@ -43,33 +44,44 @@
             this.dgShowGachaChara.Size = new System.Drawing.Size(776, 295);
             this.dgShowGachaChara.TabIndex = 0;
             // 
-            // btnLoadGachaChara
+            // BtnLoadGachaChara
             // 
-            this.btnLoadGachaChara.Location = new System.Drawing.Point(88, 371);
-            this.btnLoadGachaChara.Name = "btnLoadGachaChara";
-            this.btnLoadGachaChara.Size = new System.Drawing.Size(117, 32);
-            this.btnLoadGachaChara.TabIndex = 1;
-            this.btnLoadGachaChara.Text = "ガチャキャラ読み込み";
-            this.btnLoadGachaChara.UseVisualStyleBackColor = true;
-            this.btnLoadGachaChara.Click += new System.EventHandler(this.Button1_Click_1);
+            this.BtnLoadGachaChara.Location = new System.Drawing.Point(88, 371);
+            this.BtnLoadGachaChara.Name = "BtnLoadGachaChara";
+            this.BtnLoadGachaChara.Size = new System.Drawing.Size(117, 32);
+            this.BtnLoadGachaChara.TabIndex = 1;
+            this.BtnLoadGachaChara.Text = "ガチャキャラ読み込み";
+            this.BtnLoadGachaChara.UseVisualStyleBackColor = true;
+            this.BtnLoadGachaChara.Click += new System.EventHandler(this.BtnLoadGachaChara_Click);
             // 
-            // btnGachaCharaUpdate
+            // BtnGachaCharaUpdate
             // 
-            this.btnGachaCharaUpdate.Location = new System.Drawing.Point(296, 371);
-            this.btnGachaCharaUpdate.Name = "btnGachaCharaUpdate";
-            this.btnGachaCharaUpdate.Size = new System.Drawing.Size(101, 32);
-            this.btnGachaCharaUpdate.TabIndex = 2;
-            this.btnGachaCharaUpdate.Text = "ガチャキャラ更新";
-            this.btnGachaCharaUpdate.UseVisualStyleBackColor = true;
-            this.btnGachaCharaUpdate.Click += new System.EventHandler(this.Button1_Click);
+            this.BtnGachaCharaUpdate.Location = new System.Drawing.Point(296, 371);
+            this.BtnGachaCharaUpdate.Name = "BtnGachaCharaUpdate";
+            this.BtnGachaCharaUpdate.Size = new System.Drawing.Size(101, 32);
+            this.BtnGachaCharaUpdate.TabIndex = 2;
+            this.BtnGachaCharaUpdate.Text = "ガチャキャラ更新";
+            this.BtnGachaCharaUpdate.UseVisualStyleBackColor = true;
+            this.BtnGachaCharaUpdate.Click += new System.EventHandler(this.BtnGachaCharaUpdate_Click);
+            // 
+            // BtnInsertChara
+            // 
+            this.BtnInsertChara.Location = new System.Drawing.Point(466, 371);
+            this.BtnInsertChara.Name = "BtnInsertChara";
+            this.BtnInsertChara.Size = new System.Drawing.Size(90, 32);
+            this.BtnInsertChara.TabIndex = 3;
+            this.BtnInsertChara.Text = "キャラ追加";
+            this.BtnInsertChara.UseVisualStyleBackColor = true;
+            this.BtnInsertChara.Click += new System.EventHandler(this.BtnInsertChara_Click);
             // 
             // frmGachaCharactor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.btnGachaCharaUpdate);
-            this.Controls.Add(this.btnLoadGachaChara);
+            this.Controls.Add(this.BtnInsertChara);
+            this.Controls.Add(this.BtnGachaCharaUpdate);
+            this.Controls.Add(this.BtnLoadGachaChara);
             this.Controls.Add(this.dgShowGachaChara);
             this.Name = "frmGachaCharactor";
             this.Text = "Form1";
@@ -82,8 +94,9 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dgShowGachaChara;
-        private System.Windows.Forms.Button btnLoadGachaChara;
-        private System.Windows.Forms.Button btnGachaCharaUpdate;
+        private System.Windows.Forms.Button BtnLoadGachaChara;
+        private System.Windows.Forms.Button BtnGachaCharaUpdate;
+        private System.Windows.Forms.Button BtnInsertChara;
     }
 }
 
